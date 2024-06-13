@@ -1,4 +1,4 @@
-name: interactive_chart
+name: candlestick_chart
 description: A candlestick chart that supports hand gestures such as pinch-to-zoom and panning.
 version: 0.3.6
 homepage: https://github.com/h65wang/flutter-interactive-chart
