@@ -1,8 +1,8 @@
 import 'dart:math';
 
+import 'package:candlestick_chart/src/x_axis_offset_details.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:interactive_chart/src/x_axis_offset_details.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'candle_data.dart';
@@ -10,7 +10,7 @@ import 'chart_painter.dart';
 import 'chart_style.dart';
 import 'painter_params.dart';
 
-class InteractiveChart extends StatefulWidget {
+class CandlestickChart extends StatefulWidget {
   /// The full list of [CandleData] to be used for this chart.
   ///
   /// It needs to have at least 3 data points. If data is sufficiently large,
@@ -66,7 +66,7 @@ class InteractiveChart extends StatefulWidget {
   /// Provides X-axis offset details.
   final ValueChanged<XAxisOffsetDetails>? onXOffsetChanged;
 
-  const InteractiveChart({
+  const CandlestickChart({
     Key? key,
     required this.candles,
     this.initialVisibleCandleCount = 90,
@@ -85,10 +85,10 @@ class InteractiveChart extends StatefulWidget {
         super(key: key);
 
   @override
-  _InteractiveChartState createState() => _InteractiveChartState();
+  _CandlestickChartState createState() => _CandlestickChartState();
 }
 
-class _InteractiveChartState extends State<InteractiveChart> {
+class _CandlestickChartState extends State<CandlestickChart> {
   // The width of an individual bar in the chart.
   late double _candleWidth;
 
@@ -108,7 +108,7 @@ class _InteractiveChartState extends State<InteractiveChart> {
   PainterParams? _prevParams; // used in onTapUp event
 
   @override
-  void didUpdateWidget(covariant InteractiveChart oldWidget) {
+  void didUpdateWidget(covariant CandlestickChart oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.candles.length < widget.candles.length) {
       // Change offset to show the latest candle when new data is added

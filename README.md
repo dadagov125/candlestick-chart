@@ -1,4 +1,4 @@
-# interactive_chart
+# candlestick_chart
 
 A candlestick chart that supports pinch-to-zoom and panning.
 

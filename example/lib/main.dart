@@ -1,5 +1,5 @@
+import 'package:candlestick_chart/candlestick_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:interactive_chart/interactive_chart.dart';
 
 import 'mock_data.dart';
 
@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
         ),
         body: SafeArea(
           minimum: const EdgeInsets.all(24.0),
-          child: InteractiveChart(
+          child: CandlestickChart(
             /** Only [candles] is required */
             candles: _data,
             /** Uncomment the following for examples on optional parameters */
