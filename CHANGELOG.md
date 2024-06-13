@@ -1,3 +1,9 @@
+## 0.3.6
+
+* Added the ability to track changes in horizontal scrolling of the chart.
+* Added the ability to display the current price on the right side of the chart.
+* Now the chart is updated when the size of the list of candles changes.
+
 ## 0.3.5
 
 * Update dependency: intl to ^0.19.0.
