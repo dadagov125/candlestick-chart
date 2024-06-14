@@ -35,8 +35,11 @@ class ChartStyle {
   /// The color to use when the `close` price is lower than `open` price.
   final Color priceLossColor;
 
-  /// The color of the `volume` bars.
-  final Color volumeColor;
+  /// The color of the `volume` bars to use when the `close` price is higher than `open` price.
+  final Color volumeGainColor;
+
+  /// The color of the `volume` bars to use when the `close` price is lower than `open` price.
+  final Color volumeLossColor;
 
   /// The style of trend lines. If there are multiple lines, their styles will
   /// be chosen in the order of appearance in this list. If this list is shorter
@@ -80,11 +83,12 @@ class ChartStyle {
       ),
       rectPadding: 4.0,
       rectRadius: 2.0,
-      rectColor: Colors.red
+      rectColor: Colors.red,
     ),
     this.priceGainColor = Colors.green,
     this.priceLossColor = Colors.red,
-    this.volumeColor = Colors.grey,
+    this.volumeGainColor = Colors.grey,
+    this.volumeLossColor = Colors.grey,
     this.trendLineStyles = const [],
     this.priceGridLineColor = Colors.grey,
     this.selectionHighlightColor = const Color(0x33757575),

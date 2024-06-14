@@ -157,7 +157,7 @@ class ChartPainter extends CustomPainter {
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
-    final dashWidth = 4.0;
+    final dashWidth = 2.0;
     final dashSpace = 2.0;
     double startX = 0;
     final clampedPrice =
@@ -206,12 +206,15 @@ class ChartPainter extends CustomPainter {
     // Draw volume bar
     final volume = candle.volume;
     if (volume != null) {
+      final color = open != null && close != null && open > close
+          ? params.style.volumeLossColor
+          : params.style.volumeGainColor;
       canvas.drawLine(
         Offset(x, params.chartHeight),
         Offset(x, params.fitVolume(volume)),
         Paint()
           ..strokeWidth = thickWidth
-          ..color = params.style.volumeColor,
+          ..color = color,
       );
     }
     // Draw trend line
