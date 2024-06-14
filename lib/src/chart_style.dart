@@ -84,6 +84,7 @@ class ChartStyle {
       rectPadding: 4.0,
       rectRadius: 2.0,
       rectColor: Colors.red,
+      lineColor: Colors.red,
     ),
     this.priceGainColor = Colors.green,
     this.priceLossColor = Colors.red,
@@ -102,6 +103,7 @@ class CurrentPriceStyle {
     required this.rectPadding,
     required this.rectRadius,
     required this.rectColor,
+    required this.lineColor,
   });
 
   /// The style of current price labels (on the right of the chart).
@@ -115,4 +117,6 @@ class CurrentPriceStyle {
 
   /// The color of the current price rect.
   final Color rectColor;
+
+  final Color lineColor;
 }

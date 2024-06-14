@@ -153,7 +153,7 @@ class ChartPainter extends CustomPainter {
       return;
     }
     final paint = Paint()
-      ..color = Colors.red
+      ..color = params.style.currentPriceStyle.lineColor
       ..strokeWidth = 1
       ..style = PaintingStyle.stroke;
 
