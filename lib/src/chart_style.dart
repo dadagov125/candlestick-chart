@@ -60,6 +60,12 @@ class ChartStyle {
   /// The style of current price labels (on the right of the chart).
   final CurrentPriceStyle currentPriceStyle;
 
+  /// The color of the grid lines for the volume bars.
+  final Color volumeGridLineColor;
+
+  /// The style of volume labels (on the right of the chart).
+  final TextStyle volumeLabelStyle;
+
   const ChartStyle({
     this.volumeHeightFactor = 0.2,
     this.priceLabelWidth = 48.0,
@@ -86,12 +92,17 @@ class ChartStyle {
       rectColor: Colors.red,
       lineColor: Colors.red,
     ),
+    this.volumeLabelStyle = const TextStyle(
+      fontSize: 12,
+      color: Colors.grey,
+    ),
     this.priceGainColor = Colors.green,
     this.priceLossColor = Colors.red,
     this.volumeGainColor = Colors.grey,
     this.volumeLossColor = Colors.grey,
     this.trendLineStyles = const [],
     this.priceGridLineColor = Colors.grey,
+    this.volumeGridLineColor = Colors.grey,
     this.selectionHighlightColor = const Color(0x33757575),
     this.overlayBackgroundColor = const Color(0xEE757575),
   });

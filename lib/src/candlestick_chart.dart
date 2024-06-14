@@ -75,8 +75,16 @@ class CandlestickChart extends StatefulWidget {
   /// The positions in percentage where price labels are displayed.
   final List<double>? priceLabelPositions;
 
+  /// The positions in percentage where volume labels are displayed.
+  final List<double>? volumeLabelPositions;
+
   /// The distance between candles, as a percentage of the candle width.
   final double distanceBetweenCandle;
+
+  /// How the volume labels on the right are displayed.
+  ///
+  /// If null, it defaults to show 2 digits after the decimal point.
+  final VolumeLabelGetter? volumeLabel;
 
   const CandlestickChart({
     Key? key,
@@ -93,6 +101,8 @@ class CandlestickChart extends StatefulWidget {
     this.enableGridLines = true,
     this.priceLabelPositions,
     this.distanceBetweenCandle = 0.5,
+    this.volumeLabelPositions,
+    this.volumeLabel,
   })  : this.style = style ?? const ChartStyle(),
         assert(candles.length >= 3,
             "InteractiveChart requires 3 or more CandleData"),
@@ -212,6 +222,8 @@ class _CandlestickChartState extends State<CandlestickChart> {
               enableGridLines: widget.enableGridLines,
               priceLabelPositions:
                   widget.priceLabelPositions ?? const [0.1, 0.3, 0.5, 0.7, 0.9],
+              volumeLabelPositions:
+                  widget.volumeLabelPositions ?? const [0.3, 0.6, 0.9],
               distanceBetweenCandle: widget.distanceBetweenCandle,
             ),
           ),
@@ -227,6 +239,7 @@ class _CandlestickChartState extends State<CandlestickChart> {
                   getTimeLabel: widget.timeLabel ?? defaultTimeLabel,
                   getPriceLabel: widget.priceLabel ?? defaultPriceLabel,
                   getOverlayInfo: widget.overlayInfo ?? defaultOverlayInfo,
+                  getVolumeLabel: widget.volumeLabel ?? defaultVolumeLabel,
                 ),
               ),
             );
@@ -366,6 +379,8 @@ class _CandlestickChartState extends State<CandlestickChart> {
   }
 
   String defaultPriceLabel(double price) => price.toStringAsFixed(2);
+
+  String defaultVolumeLabel(double volume) => volume.toStringAsFixed(2);
 
   Map<String, String> defaultOverlayInfo(CandleData candle) {
     final date = intl.DateFormat.yMMMd()

@@ -8,18 +8,21 @@ import 'painter_params.dart';
 typedef TimeLabelGetter = String Function(int timestamp, int visibleDataCount);
 typedef PriceLabelGetter = String Function(double price);
 typedef OverlayInfoGetter = Map<String, String> Function(CandleData candle);
+typedef VolumeLabelGetter = String Function(double volume);
 
 class ChartPainter extends CustomPainter {
   final PainterParams params;
   final TimeLabelGetter getTimeLabel;
   final PriceLabelGetter getPriceLabel;
   final OverlayInfoGetter getOverlayInfo;
+  final VolumeLabelGetter getVolumeLabel;
 
   ChartPainter({
     required this.params,
     required this.getTimeLabel,
     required this.getPriceLabel,
     required this.getOverlayInfo,
+    required this.getVolumeLabel,
   });
 
   @override
@@ -27,6 +30,7 @@ class ChartPainter extends CustomPainter {
     // Draw time labels (dates) & price labels
     _drawTimeLabels(canvas, params);
     _drawPriceGridAndLabels(canvas, params);
+    _drawVolumeGridAndLabels(canvas, params);
     _drawCurrentPriceLabel(canvas, params);
     _drawCurrentPriceLine(canvas, params);
 
@@ -107,6 +111,36 @@ class ChartPainter extends CustomPainter {
           Offset(
             params.chartWidth + 4,
             params.fitPrice(y) - priceTp.height / 2,
+          ));
+    }
+  }
+
+  void _drawVolumeGridAndLabels(canvas, PainterParams params) {
+    for (final v in params.volumeLabelPositions) {
+      final y = (params.maxVol - params.minVol) * v + params.minVol;
+
+      if (params.enableGridLines) {
+        canvas.drawLine(
+          Offset(0, params.fitVolume(y)),
+          Offset(params.chartWidth, params.fitVolume(y)),
+          Paint()
+            ..strokeWidth = 0.5
+            ..color = params.style.volumeGridLineColor,
+        );
+      }
+      final volumeTp = TextPainter(
+        text: TextSpan(
+          text: getVolumeLabel(y),
+          style: params.style.volumeLabelStyle,
+        ),
+      )
+        ..textDirection = TextDirection.ltr
+        ..layout();
+      volumeTp.paint(
+          canvas,
+          Offset(
+            params.chartWidth + 4,
+            params.fitVolume(y) - volumeTp.height / 2,
           ));
     }
   }

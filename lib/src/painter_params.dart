@@ -24,6 +24,7 @@ class PainterParams {
   final bool enableGridLines;
   final List<double> priceLabelPositions;
   final double distanceBetweenCandle;
+  final List<double> volumeLabelPositions;
 
   PainterParams({
     required this.candles,
@@ -41,6 +42,7 @@ class PainterParams {
     required this.trailingTrends,
     required this.priceLabelPositions,
     required this.distanceBetweenCandle,
+    required this.volumeLabelPositions,
     this.currentPrice,
     this.enableGridLines = true,
   });
@@ -110,6 +112,7 @@ class PainterParams {
       enableGridLines: b.enableGridLines,
       priceLabelPositions: b.priceLabelPositions,
       distanceBetweenCandle: lerpField((p) => p.distanceBetweenCandle),
+      volumeLabelPositions: b.volumeLabelPositions,
     );
   }
 
