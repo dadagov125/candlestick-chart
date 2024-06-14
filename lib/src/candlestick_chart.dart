@@ -66,6 +66,9 @@ class CandlestickChart extends StatefulWidget {
   /// Provides X-axis offset details.
   final ValueChanged<XAxisOffsetDetails>? onXOffsetChanged;
 
+  /// The current price to be displayed on the right side of the chart.
+  final double? currentPrice;
+
   const CandlestickChart({
     Key? key,
     required this.candles,
@@ -77,6 +80,7 @@ class CandlestickChart extends StatefulWidget {
     this.onTap,
     this.onCandleResize,
     this.onXOffsetChanged,
+    this.currentPrice,
   })  : this.style = style ?? const ChartStyle(),
         assert(candles.length >= 3,
             "InteractiveChart requires 3 or more CandleData"),
@@ -192,6 +196,7 @@ class _CandlestickChartState extends State<CandlestickChart> {
               tapPosition: _tapPosition,
               leadingTrends: leadingTrends,
               trailingTrends: trailingTrends,
+              currentPrice: widget.currentPrice,
             ),
           ),
           duration: Duration(milliseconds: 300),
