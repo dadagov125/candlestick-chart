@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 class ChartStyle {
@@ -71,6 +70,8 @@ class ChartStyle {
   /// The style of current volume labels.
   final CurrentVolumeStyle currentVolumeStyle;
 
+  final Logo? logo;
+
   const ChartStyle({
     this.volumeHeightFactor = 0.2,
     this.priceLabelWidth = 48.0,
@@ -118,8 +119,9 @@ class ChartStyle {
       rectPadding: 4.0,
       rectRadius: 2.0,
       rectColor: Colors.red,
-      position: Point(8, 8),
+      offset: Offset(8, 8),
     ),
+    this.logo,
   });
 }
 
@@ -153,7 +155,7 @@ class CurrentVolumeStyle {
     required this.rectPadding,
     required this.rectRadius,
     required this.rectColor,
-    required this.position,
+    required this.offset,
   });
 
   /// The style of current volume labels (on the right of the chart).
@@ -168,7 +170,23 @@ class CurrentVolumeStyle {
   /// The color of the current volume rect.
   final Color rectColor;
 
-  /// The position of the current volume rect.
-  final Point<double> position;
+  /// The offset of the current volume rect.
+  final Offset offset;
 }
 
+class Logo {
+  const Logo({
+    required this.image,
+    required this.percentageOffset,
+    this.size,
+    this.opacity = 1,
+  }) : assert(opacity >= 0 && opacity <= 1);
+
+  final ui.Image image;
+
+  final ui.Size? size;
+
+  final double opacity;
+
+  final Offset percentageOffset;
+}

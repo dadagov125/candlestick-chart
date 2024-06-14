@@ -49,6 +49,7 @@ class ChartPainter extends CustomPainter {
     }
     canvas.restore();
 
+    _drawLogo(canvas, params);
     // Draw tap highlight & overlay
     if (params.tapPosition != null) {
       if (params.tapPosition!.dx < params.chartWidth) {
@@ -221,8 +222,8 @@ class ChartPainter extends CustomPainter {
     final volumeHeight = params.volumeHeight;
     final chartHeight = params.chartHeight;
 
-    final dx = params.style.currentVolumeStyle.position.x;
-    final dy = params.style.currentVolumeStyle.position.y +
+    final dx = params.style.currentVolumeStyle.offset.dx;
+    final dy = params.style.currentVolumeStyle.offset.dy +
         (chartHeight - volumeHeight);
 
     final padding = params.style.currentVolumeStyle.rectPadding;
@@ -421,6 +422,32 @@ class ChartPainter extends CustomPainter {
     }
 
     canvas.restore();
+  }
+
+  void _drawLogo(Canvas canvas, PainterParams params) {
+    final logo = params.style.logo;
+
+    if (logo == null) {
+      return;
+    }
+
+    final position = logo.percentageOffset;
+    final left = params.chartWidth * position.dx;
+    final top = params.chartHeight * position.dy;
+    final image = logo.image;
+    final width = (logo.size?.width ?? image.width).toDouble();
+    final height = (logo.size?.height ?? image.height).toDouble();
+    final sourceRect = Rect.fromLTWH(
+      0,
+      0,
+      image.width.toDouble(),
+      image.height.toDouble(),
+    );
+
+    final paint = Paint();
+    paint.color = Color.fromRGBO(255, 255, 255, logo.opacity);
+    final destinationRect = Rect.fromLTWH(left, top, width, height);
+    canvas.drawImageRect(image, sourceRect, destinationRect, paint);
   }
 
   @override
