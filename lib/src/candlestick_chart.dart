@@ -75,6 +75,9 @@ class CandlestickChart extends StatefulWidget {
   /// The positions in percentage where price labels are displayed.
   final List<double>? priceLabelPositions;
 
+  /// The distance between candles, as a percentage of the candle width.
+  final double distanceBetweenCandle;
+
   const CandlestickChart({
     Key? key,
     required this.candles,
@@ -89,6 +92,7 @@ class CandlestickChart extends StatefulWidget {
     this.currentPrice,
     this.enableGridLines = true,
     this.priceLabelPositions,
+    this.distanceBetweenCandle = 0.5,
   })  : this.style = style ?? const ChartStyle(),
         assert(candles.length >= 3,
             "InteractiveChart requires 3 or more CandleData"),
@@ -208,6 +212,7 @@ class _CandlestickChartState extends State<CandlestickChart> {
               enableGridLines: widget.enableGridLines,
               priceLabelPositions:
                   widget.priceLabelPositions ?? const [0.1, 0.3, 0.5, 0.7, 0.9],
+              distanceBetweenCandle: widget.distanceBetweenCandle,
             ),
           ),
           duration: Duration(milliseconds: 300),

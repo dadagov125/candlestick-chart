@@ -172,9 +172,13 @@ class ChartPainter extends CustomPainter {
 
   void _drawSingleDay(canvas, PainterParams params, int i) {
     final candle = params.candles[i];
-    final x = i * params.candleWidth;
-    final thickWidth = max(params.candleWidth * 0.8, 0.8);
-    final thinWidth = max(params.candleWidth * 0.2, 0.2);
+    final candleWidth = params.candleWidth;
+    final distanceBetweenCandle = params.distanceBetweenCandle;
+    final thickWidth =
+        max(candleWidth * distanceBetweenCandle, distanceBetweenCandle);
+    final thinWidth = max(thickWidth * 0.2, 0.2);
+    final x = i * candleWidth;
+
     // Draw price bar
     final open = candle.open;
     final close = candle.close;
@@ -227,7 +231,7 @@ class ChartPainter extends CustomPainter {
       final prevPt = params.candles.at(i - 1)?.trends.at(j);
       if (pt != null && prevPt != null) {
         canvas.drawLine(
-          Offset(x - params.candleWidth, params.fitPrice(prevPt)),
+          Offset(x - candleWidth, params.fitPrice(prevPt)),
           Offset(x, params.fitPrice(pt)),
           trendLinePaint,
         );
@@ -236,8 +240,8 @@ class ChartPainter extends CustomPainter {
         // In the front, draw an extra line connecting to out-of-window data
         if (pt != null && params.leadingTrends?.at(j) != null) {
           canvas.drawLine(
-            Offset(x - params.candleWidth,
-                params.fitPrice(params.leadingTrends!.at(j)!)),
+            Offset(
+                x - candleWidth, params.fitPrice(params.leadingTrends!.at(j)!)),
             Offset(x, params.fitPrice(pt)),
             trendLinePaint,
           );
@@ -248,7 +252,7 @@ class ChartPainter extends CustomPainter {
           canvas.drawLine(
             Offset(x, params.fitPrice(pt)),
             Offset(
-              x + params.candleWidth,
+              x + candleWidth,
               params.fitPrice(params.trailingTrends!.at(j)!),
             ),
             trendLinePaint,

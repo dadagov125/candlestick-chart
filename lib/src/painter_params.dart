@@ -23,6 +23,7 @@ class PainterParams {
   final List<double?>? trailingTrends;
   final bool enableGridLines;
   final List<double> priceLabelPositions;
+  final double distanceBetweenCandle;
 
   PainterParams({
     required this.candles,
@@ -39,6 +40,7 @@ class PainterParams {
     required this.leadingTrends,
     required this.trailingTrends,
     required this.priceLabelPositions,
+    required this.distanceBetweenCandle,
     this.currentPrice,
     this.enableGridLines = true,
   });
@@ -107,6 +109,7 @@ class PainterParams {
           b.currentPrice != null ? lerpField((p) => p.currentPrice!) : null,
       enableGridLines: b.enableGridLines,
       priceLabelPositions: b.priceLabelPositions,
+      distanceBetweenCandle: lerpField((p) => p.distanceBetweenCandle),
     );
   }
 
