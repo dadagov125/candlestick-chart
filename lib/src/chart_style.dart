@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class ChartStyle {
@@ -66,6 +68,9 @@ class ChartStyle {
   /// The style of volume labels (on the right of the chart).
   final TextStyle volumeLabelStyle;
 
+  /// The style of current volume labels.
+  final CurrentVolumeStyle currentVolumeStyle;
+
   const ChartStyle({
     this.volumeHeightFactor = 0.2,
     this.priceLabelWidth = 48.0,
@@ -105,6 +110,16 @@ class ChartStyle {
     this.volumeGridLineColor = Colors.grey,
     this.selectionHighlightColor = const Color(0x33757575),
     this.overlayBackgroundColor = const Color(0xEE757575),
+    this.currentVolumeStyle = const CurrentVolumeStyle(
+      labelStyle: TextStyle(
+        fontSize: 12,
+        color: Colors.white,
+      ),
+      rectPadding: 4.0,
+      rectRadius: 2.0,
+      rectColor: Colors.red,
+      position: Point(8, 8),
+    ),
   });
 }
 
@@ -131,3 +146,29 @@ class CurrentPriceStyle {
 
   final Color lineColor;
 }
+
+class CurrentVolumeStyle {
+  const CurrentVolumeStyle({
+    required this.labelStyle,
+    required this.rectPadding,
+    required this.rectRadius,
+    required this.rectColor,
+    required this.position,
+  });
+
+  /// The style of current volume labels (on the right of the chart).
+  final TextStyle labelStyle;
+
+  /// The padding around the current volume rect.
+  final double rectPadding;
+
+  /// The radius of the current volume rect.
+  final double rectRadius;
+
+  /// The color of the current volume rect.
+  final Color rectColor;
+
+  /// The position of the current volume rect.
+  final Point<double> position;
+}
+

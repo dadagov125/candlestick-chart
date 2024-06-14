@@ -33,6 +33,7 @@ class ChartPainter extends CustomPainter {
     _drawVolumeGridAndLabels(canvas, params);
     _drawCurrentPriceLabel(canvas, params);
     _drawCurrentPriceLine(canvas, params);
+    _drawCurrentVolumeLabel(canvas, params);
 
     // Draw prices, volumes & trend line
     canvas.save();
@@ -145,10 +146,7 @@ class ChartPainter extends CustomPainter {
     }
   }
 
-  void _drawCurrentPriceLabel(
-    Canvas canvas,
-    PainterParams params,
-  ) {
+  void _drawCurrentPriceLabel(Canvas canvas, PainterParams params) {
     final currentPrice = params.currentPrice;
     if (currentPrice == null) {
       return;
@@ -202,6 +200,41 @@ class ChartPainter extends CustomPainter {
       );
       startX += dashWidth + dashSpace;
     }
+  }
+
+  void _drawCurrentVolumeLabel(Canvas canvas, PainterParams params) {
+    final currentVolume = params.currentVolume;
+
+    if (currentVolume == null) {
+      return;
+    }
+
+    final volumeTp = TextPainter(
+      text: TextSpan(
+        text: getVolumeLabel(currentVolume),
+        style: params.style.currentVolumeStyle.labelStyle,
+      ),
+    )
+      ..textDirection = TextDirection.ltr
+      ..layout();
+
+    final volumeHeight = params.volumeHeight;
+    final chartHeight = params.chartHeight;
+
+    final dx = params.style.currentVolumeStyle.position.x;
+    final dy = params.style.currentVolumeStyle.position.y +
+        (chartHeight - volumeHeight);
+
+    final padding = params.style.currentVolumeStyle.rectPadding;
+    final radius = params.style.currentVolumeStyle.rectRadius;
+    final rectColor = params.style.currentVolumeStyle.rectColor;
+
+    final rect = Rect.fromLTWH(
+        dx, dy, volumeTp.width + 2 * padding, volumeTp.height + 2 * padding);
+    final rrect = RRect.fromRectAndRadius(rect, Radius.circular(radius));
+    canvas.drawRRect(rrect, Paint()..color = rectColor);
+
+    volumeTp.paint(canvas, Offset(dx + padding, dy + padding));
   }
 
   void _drawSingleDay(canvas, PainterParams params, int i) {

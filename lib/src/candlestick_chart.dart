@@ -86,6 +86,9 @@ class CandlestickChart extends StatefulWidget {
   /// If null, it defaults to show 2 digits after the decimal point.
   final VolumeLabelGetter? volumeLabel;
 
+  /// The current volume to be displayed on the right side of the chart.
+  final double? currentVolume;
+
   const CandlestickChart({
     Key? key,
     required this.candles,
@@ -103,6 +106,7 @@ class CandlestickChart extends StatefulWidget {
     this.distanceBetweenCandle = 0.5,
     this.volumeLabelPositions,
     this.volumeLabel,
+    this.currentVolume,
   })  : this.style = style ?? const ChartStyle(),
         assert(candles.length >= 3,
             "InteractiveChart requires 3 or more CandleData"),
@@ -219,6 +223,7 @@ class _CandlestickChartState extends State<CandlestickChart> {
               leadingTrends: leadingTrends,
               trailingTrends: trailingTrends,
               currentPrice: widget.currentPrice,
+              currentVolume: widget.currentVolume,
               enableGridLines: widget.enableGridLines,
               priceLabelPositions:
                   widget.priceLabelPositions ?? const [0.1, 0.3, 0.5, 0.7, 0.9],

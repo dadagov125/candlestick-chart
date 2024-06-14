@@ -7,6 +7,7 @@ import 'candle_data.dart';
 class PainterParams {
   final List<CandleData> candles;
   final double? currentPrice;
+  final double? currentVolume;
   final ChartStyle style;
   final Size size;
   final double candleWidth;
@@ -44,6 +45,7 @@ class PainterParams {
     required this.distanceBetweenCandle,
     required this.volumeLabelPositions,
     this.currentPrice,
+    this.currentVolume,
     this.enableGridLines = true,
   });
 
@@ -109,6 +111,8 @@ class PainterParams {
       trailingTrends: b.trailingTrends,
       currentPrice:
           b.currentPrice != null ? lerpField((p) => p.currentPrice!) : null,
+      currentVolume:
+          b.currentVolume != null ? lerpField((p) => p.currentVolume!) : null,
       enableGridLines: b.enableGridLines,
       priceLabelPositions: b.priceLabelPositions,
       distanceBetweenCandle: lerpField((p) => p.distanceBetweenCandle),
@@ -120,6 +124,8 @@ class PainterParams {
     if (candles.length != other.candles.length) return true;
 
     if (other.currentPrice != currentPrice) return true;
+
+    if (other.currentVolume != currentVolume) return true;
 
     if (size != other.size ||
         candleWidth != other.candleWidth ||
