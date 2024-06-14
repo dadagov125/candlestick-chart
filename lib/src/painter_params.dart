@@ -21,6 +21,7 @@ class PainterParams {
   final Offset? tapPosition;
   final List<double?>? leadingTrends;
   final List<double?>? trailingTrends;
+  final bool enableGridLines;
 
   PainterParams({
     required this.candles,
@@ -37,6 +38,7 @@ class PainterParams {
     required this.leadingTrends,
     required this.trailingTrends,
     this.currentPrice,
+    this.enableGridLines = true,
   });
 
   double get chartWidth => // width without price labels
@@ -86,21 +88,23 @@ class PainterParams {
     double lerpField(double getField(PainterParams p)) =>
         lerpDouble(getField(a), getField(b), t)!;
     return PainterParams(
-        candles: b.candles,
-        style: b.style,
-        size: b.size,
-        candleWidth: b.candleWidth,
-        startOffset: b.startOffset,
-        maxPrice: lerpField((p) => p.maxPrice),
-        minPrice: lerpField((p) => p.minPrice),
-        maxVol: lerpField((p) => p.maxVol),
-        minVol: lerpField((p) => p.minVol),
-        xShift: b.xShift,
-        tapPosition: b.tapPosition,
-        leadingTrends: b.leadingTrends,
-        trailingTrends: b.trailingTrends,
-        currentPrice:
-            b.currentPrice != null ? lerpField((p) => p.currentPrice!) : null);
+      candles: b.candles,
+      style: b.style,
+      size: b.size,
+      candleWidth: b.candleWidth,
+      startOffset: b.startOffset,
+      maxPrice: lerpField((p) => p.maxPrice),
+      minPrice: lerpField((p) => p.minPrice),
+      maxVol: lerpField((p) => p.maxVol),
+      minVol: lerpField((p) => p.minVol),
+      xShift: b.xShift,
+      tapPosition: b.tapPosition,
+      leadingTrends: b.leadingTrends,
+      trailingTrends: b.trailingTrends,
+      currentPrice:
+          b.currentPrice != null ? lerpField((p) => p.currentPrice!) : null,
+      enableGridLines: b.enableGridLines,
+    );
   }
 
   bool shouldRepaint(PainterParams other) {
@@ -124,6 +128,8 @@ class PainterParams {
         trailingTrends != other.trailingTrends) return true;
 
     if (style != other.style) return true;
+
+    if (enableGridLines != other.enableGridLines) return true;
 
     return false;
   }

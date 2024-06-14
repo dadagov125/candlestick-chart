@@ -82,16 +82,20 @@ class ChartPainter extends CustomPainter {
   }
 
   void _drawPriceGridAndLabels(canvas, PainterParams params) {
-    [0.0, 0.25, 0.5, 0.75, 1.0]
-        .map((v) => ((params.maxPrice - params.minPrice) * v) + params.minPrice)
-        .forEach((y) {
-      canvas.drawLine(
-        Offset(0, params.fitPrice(y)),
-        Offset(params.chartWidth, params.fitPrice(y)),
-        Paint()
-          ..strokeWidth = 0.5
-          ..color = params.style.priceGridLineColor,
-      );
+    const location = [0.0, 0.25, 0.5, 0.75, 1.0];
+
+    for (final v in location) {
+      final y = (params.maxPrice - params.minPrice) * v + params.minPrice;
+
+      if (params.enableGridLines) {
+        canvas.drawLine(
+          Offset(0, params.fitPrice(y)),
+          Offset(params.chartWidth, params.fitPrice(y)),
+          Paint()
+            ..strokeWidth = 0.5
+            ..color = params.style.priceGridLineColor,
+        );
+      }
       final priceTp = TextPainter(
         text: TextSpan(
           text: getPriceLabel(y),
@@ -106,7 +110,7 @@ class ChartPainter extends CustomPainter {
             params.chartWidth + 4,
             params.fitPrice(y) - priceTp.height / 2,
           ));
-    });
+    }
   }
 
   void _drawCurrentPriceLabel(
@@ -120,8 +124,7 @@ class ChartPainter extends CustomPainter {
     final priceTp = TextPainter(
       text: TextSpan(
         text: getPriceLabel(currentPrice),
-        style: params.style.currentPriceStyle
-            .labelStyle,
+        style: params.style.currentPriceStyle.labelStyle,
       ),
     )
       ..textDirection = TextDirection.ltr
@@ -131,7 +134,6 @@ class ChartPainter extends CustomPainter {
     final dy =
         params.fitPrice(currentPrice).clamp(0, params.chartHeight).toDouble() -
             priceTp.height / 2;
-
 
     final padding = params.style.currentPriceStyle.rectPadding;
     final radius = params.style.currentPriceStyle.rectRadius;

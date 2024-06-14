@@ -69,6 +69,9 @@ class CandlestickChart extends StatefulWidget {
   /// The current price to be displayed on the right side of the chart.
   final double? currentPrice;
 
+  /// Whether to display grid lines in the background.
+  final bool enableGridLines;
+
   const CandlestickChart({
     Key? key,
     required this.candles,
@@ -81,6 +84,7 @@ class CandlestickChart extends StatefulWidget {
     this.onCandleResize,
     this.onXOffsetChanged,
     this.currentPrice,
+    this.enableGridLines = true,
   })  : this.style = style ?? const ChartStyle(),
         assert(candles.length >= 3,
             "InteractiveChart requires 3 or more CandleData"),
@@ -197,6 +201,7 @@ class _CandlestickChartState extends State<CandlestickChart> {
               leadingTrends: leadingTrends,
               trailingTrends: trailingTrends,
               currentPrice: widget.currentPrice,
+              enableGridLines: widget.enableGridLines,
             ),
           ),
           duration: Duration(milliseconds: 300),
