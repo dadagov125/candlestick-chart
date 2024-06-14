@@ -1,6 +1,6 @@
 name: candlestick_chart
 description: A candlestick chart that supports hand gestures such as pinch-to-zoom and panning.
-version: 0.3.6
+version: 0.3.7
 homepage: https://github.com/dadagov125/candlestick-chart
 
 environment:

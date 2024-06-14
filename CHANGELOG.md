@@ -1,3 +1,7 @@
+## 0.3.7
+
+* expose currentPrice to InteractiveChart.
+
 ## 0.3.6
 
 * Added the ability to track changes in horizontal scrolling of the chart.
