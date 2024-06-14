@@ -82,9 +82,7 @@ class ChartPainter extends CustomPainter {
   }
 
   void _drawPriceGridAndLabels(canvas, PainterParams params) {
-    const location = [0.0, 0.25, 0.5, 0.75, 1.0];
-
-    for (final v in location) {
+    for (final v in params.priceLabelPositions) {
       final y = (params.maxPrice - params.minPrice) * v + params.minPrice;
 
       if (params.enableGridLines) {

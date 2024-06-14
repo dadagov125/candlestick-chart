@@ -72,6 +72,9 @@ class CandlestickChart extends StatefulWidget {
   /// Whether to display grid lines in the background.
   final bool enableGridLines;
 
+  /// The positions in percentage where price labels are displayed.
+  final List<double>? priceLabelPositions;
+
   const CandlestickChart({
     Key? key,
     required this.candles,
@@ -85,6 +88,7 @@ class CandlestickChart extends StatefulWidget {
     this.onXOffsetChanged,
     this.currentPrice,
     this.enableGridLines = true,
+    this.priceLabelPositions,
   })  : this.style = style ?? const ChartStyle(),
         assert(candles.length >= 3,
             "InteractiveChart requires 3 or more CandleData"),
@@ -202,6 +206,8 @@ class _CandlestickChartState extends State<CandlestickChart> {
               trailingTrends: trailingTrends,
               currentPrice: widget.currentPrice,
               enableGridLines: widget.enableGridLines,
+              priceLabelPositions:
+                  widget.priceLabelPositions ?? const [0.1, 0.3, 0.5, 0.7, 0.9],
             ),
           ),
           duration: Duration(milliseconds: 300),
