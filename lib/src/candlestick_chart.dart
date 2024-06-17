@@ -120,8 +120,8 @@ class CandlestickChart extends StatefulWidget {
             initialVisibleCandleCount >= minVisibleCandleCount &&
                 initialVisibleCandleCount <= maxVisibleCandleCount,
             'The initialVisibleCandleCount must be between minVisibleCandleCount and maxVisibleCandleCount'),
-        assert(candles.length >= 3,
-            "InteractiveChart requires 3 or more CandleData"),
+        assert(candles.length >= 0,
+            "InteractiveChart requires 1 or more CandleData"),
         assert(initialVisibleCandleCount >= 3,
             "initialVisibleCandleCount must be more 3 or more"),
         super(key: key);
@@ -366,7 +366,8 @@ class _CandlestickChartState extends State<CandlestickChart> {
         widget.candles.length,
         widget.initialVisibleCandleCount,
       );
-      _candleWidth = w / count;
+
+      _candleWidth = w / max(count, widget.minVisibleCandleCount);
       // Default show the latest available data, e.g. the most recent 90 days.
       _startOffset = (widget.candles.length - count) * _candleWidth;
     }
