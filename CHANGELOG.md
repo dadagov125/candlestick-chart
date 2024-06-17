@@ -1,3 +1,21 @@
+## 0.4.0
+
+* **Breaking Changes:**
+    * `volumeColor` has been separated into `volumeGainColor` and `volumeLossColor`.
+
+* **New Features:**
+    * Added `enableGridLines` parameter to allow users to toggle the grid lines.
+    * Added `lineColor` to `currentPriceStyle` to customize the color of the current price line.
+    * Added `logo` params to ChartStyle  to allow users to add a logo to the chart.
+    * Added `minVisibleCandleCount` and `maxVisibleCandleCount` to control the number of visible candles in the chart.
+    * Added `volumeLabel` for better volume data representation.
+    * Added `currentVolumeLabel` for real-time volume data representation.
+    * Added `priceLabelPositions` to `CandlestickChart` for better customization.
+    * Added `distanceBetweenCandle` to `CandlestickChart` for better customization.
+  
+* **Changes:**
+    * Changed min candles length to 1.
+
 ## 0.3.7
 
 * expose currentPrice to InteractiveChart.
@@ -18,19 +36,23 @@
 
 ## 0.3.3
 
-* Fix an issue where `onTap` event was not firing. [(Issue #8)](https://github.com/fluttercandies/flutter-interactive-chart/issues/8)
+* Fix an issue where `onTap` event was not
+  firing. [(Issue #8)](https://github.com/fluttercandies/flutter-interactive-chart/issues/8)
 
 ## 0.3.2
 
-* Add `initialVisibleCandleCount` parameter for setting a default zoom level. [(Issue #6)](https://github.com/fluttercandies/flutter-interactive-chart/issues/6)
+* Add `initialVisibleCandleCount` parameter for setting a default zoom
+  level. [(Issue #6)](https://github.com/fluttercandies/flutter-interactive-chart/issues/6)
 
 ## 0.3.1
 
-* Allow web and desktop users to zoom the chart with mouse scroll wheel. [(Issue #4)](https://github.com/fluttercandies/flutter-interactive-chart/issues/4)
+* Allow web and desktop users to zoom the chart with mouse scroll
+  wheel. [(Issue #4)](https://github.com/fluttercandies/flutter-interactive-chart/issues/4)
 
 ## 0.3.0
 
-* BREAKING: Add support for multiple trend lines. [(Issue #2)](https://github.com/fluttercandies/flutter-interactive-chart/issues/2)
+* BREAKING: Add support for multiple trend
+  lines. [(Issue #2)](https://github.com/fluttercandies/flutter-interactive-chart/issues/2)
 * The old `trend` property is changed to `trends`, to support multiple data points per `CandleData`.
 * The old `trendLineColor` property is changed to `trendLineStyles`.
 * The `CandleData.computeMA` helper function no longer modifies data in-place. To migrate,
