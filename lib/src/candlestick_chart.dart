@@ -89,6 +89,12 @@ class CandlestickChart extends StatefulWidget {
   /// The current volume to be displayed on the right side of the chart.
   final double? currentVolume;
 
+  /// The minimum number of visible candles in the chart.
+  final int minVisibleCandleCount;
+
+  /// The maximum number of visible candles in the chart.
+  final int maxVisibleCandleCount;
+
   const CandlestickChart({
     Key? key,
     required this.candles,
@@ -107,7 +113,13 @@ class CandlestickChart extends StatefulWidget {
     this.volumeLabelPositions,
     this.volumeLabel,
     this.currentVolume,
+    this.minVisibleCandleCount = 45,
+    this.maxVisibleCandleCount = 180,
   })  : this.style = style ?? const ChartStyle(),
+        assert(
+            initialVisibleCandleCount >= minVisibleCandleCount &&
+                initialVisibleCandleCount <= maxVisibleCandleCount,
+            'The initialVisibleCandleCount must be between minVisibleCandleCount and maxVisibleCandleCount'),
         assert(candles.length >= 3,
             "InteractiveChart requires 3 or more CandleData"),
         assert(initialVisibleCandleCount >= 3,
@@ -295,8 +307,15 @@ class _CandlestickChartState extends State<CandlestickChart> {
 
   _onScaleUpdate(double scale, Offset focalPoint, double w) {
     // Handle zoom
-    final candleWidth = (_prevCandleWidth * scale)
-        .clamp(_getMinCandleWidth(w), _getMaxCandleWidth(w));
+    var candleWidth = _prevCandleWidth * scale;
+
+    // Check if the current zoom level is within the allowed range
+    final visibleCandles = w / candleWidth;
+    if (visibleCandles < widget.minVisibleCandleCount) {
+      candleWidth = w / widget.minVisibleCandleCount;
+    } else if (visibleCandles > widget.maxVisibleCandleCount) {
+      candleWidth = w / widget.maxVisibleCandleCount;
+    }
     final clampedScale = candleWidth / _prevCandleWidth;
     var startOffset = _prevStartOffset * clampedScale;
     // Handle pan
