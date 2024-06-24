@@ -159,12 +159,13 @@ class _CandlestickChartState extends State<CandlestickChart> {
         widget.initialVisibleCandleCount,
       );
 
-      _candleWidth = _prevChartWidth! / max(count, widget.minVisibleCandleCount);
+      _candleWidth =
+          _prevChartWidth! / max(count, widget.minVisibleCandleCount);
       _startOffset = (widget.candles.length - count) * _candleWidth;
     } else if (oldWidget.candles.length < widget.candles.length) {
-      // Change offset to show the latest candle when new data is added
-      _startOffset =
-          max(0, widget.candles.length * _candleWidth - _prevChartWidth!);
+      // Increase offset to keep the current position when new candles are added
+      final newCandlesCount = widget.candles.length - oldWidget.candles.length;
+      _startOffset += newCandlesCount * _candleWidth;
     }
   }
 
