@@ -152,7 +152,16 @@ class _CandlestickChartState extends State<CandlestickChart> {
   @override
   void didUpdateWidget(covariant CandlestickChart oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.candles.length < widget.candles.length) {
+    if (oldWidget.candles.length > widget.candles.length) {
+      // Reset to initial state if the new widget has fewer candles
+      final count = min(
+        widget.candles.length,
+        widget.initialVisibleCandleCount,
+      );
+
+      _candleWidth = _prevChartWidth! / max(count, widget.minVisibleCandleCount);
+      _startOffset = (widget.candles.length - count) * _candleWidth;
+    } else if (oldWidget.candles.length < widget.candles.length) {
       // Change offset to show the latest candle when new data is added
       _startOffset =
           max(0, widget.candles.length * _candleWidth - _prevChartWidth!);
