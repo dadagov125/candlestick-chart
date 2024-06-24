@@ -1,5 +1,7 @@
 # candlestick_chart
 
+forked from https://github.com/fluttercandies/flutter-interactive-chart
+
 A candlestick chart that supports pinch-to-zoom and panning.
 
 ## Dark mode
