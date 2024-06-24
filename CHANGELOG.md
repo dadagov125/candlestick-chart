@@ -1,3 +1,12 @@
+## 0.4.1
+
+* **Fixes:**
+  * Reset to initial state if the new widget has fewer candles.
+  * Increase offset to keep the current position when new candles are added.
+
+* **New Features:**
+  * Added `animationDuration` parameter to control the duration of animations.
+
 ## 0.4.0
 
 * **Breaking Changes:**
