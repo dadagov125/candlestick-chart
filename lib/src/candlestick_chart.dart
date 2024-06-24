@@ -95,6 +95,9 @@ class CandlestickChart extends StatefulWidget {
   /// The maximum number of visible candles in the chart.
   final int maxVisibleCandleCount;
 
+  /// The duration of the animation when the chart is updated.
+  final Duration animationDuration;
+
   const CandlestickChart({
     Key? key,
     required this.candles,
@@ -115,6 +118,7 @@ class CandlestickChart extends StatefulWidget {
     this.currentVolume,
     this.minVisibleCandleCount = 45,
     this.maxVisibleCandleCount = 180,
+    this.animationDuration = const Duration(milliseconds: 300),
   })  : this.style = style ?? const ChartStyle(),
         assert(
             initialVisibleCandleCount >= minVisibleCandleCount &&
@@ -254,7 +258,7 @@ class _CandlestickChartState extends State<CandlestickChart> {
               distanceBetweenCandle: widget.distanceBetweenCandle,
             ),
           ),
-          duration: Duration(milliseconds: 300),
+          duration: widget.animationDuration,
           curve: Curves.easeOut,
           builder: (_, PainterParams params, __) {
             _prevParams = params;
