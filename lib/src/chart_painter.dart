@@ -163,7 +163,7 @@ class ChartPainter extends CustomPainter {
 
     final dx = params.chartWidth + 4;
     final dy =
-        params.fitPrice(currentPrice).clamp(0, params.chartHeight).toDouble() -
+        params.fitPrice(currentPrice).clamp(0, params.priceHeight).toDouble() -
             priceTp.height / 2;
 
     final padding = params.style.currentPriceStyle.rectPadding;
@@ -192,7 +192,7 @@ class ChartPainter extends CustomPainter {
     final dashSpace = 2.0;
     double startX = 0;
     final clampedPrice =
-        params.fitPrice(currentPrice).clamp(0, params.chartHeight).toDouble();
+    params.fitPrice(currentPrice).clamp(0, params.priceHeight).toDouble();
     while (startX < params.chartWidth) {
       canvas.drawLine(
         Offset(startX, clampedPrice),
