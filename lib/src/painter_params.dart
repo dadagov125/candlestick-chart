@@ -100,7 +100,7 @@ class PainterParams {
       style: b.style,
       size: b.size,
       candleWidth: b.candleWidth,
-      startOffset: b.startOffset,
+      startOffset: lerpField((p) => p.startOffset),
       maxPrice: lerpField((p) => p.maxPrice),
       minPrice: lerpField((p) => p.minPrice),
       maxVol: lerpField((p) => p.maxVol),

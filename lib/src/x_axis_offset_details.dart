@@ -2,10 +2,12 @@ class XAxisOffsetDetails {
   XAxisOffsetDetails({
     required this.offset,
     required this.maxOffset,
+    required this.prevOffset,
   });
 
   final double offset;
   final double maxOffset;
+  final double prevOffset;
 
   @override
   bool operator ==(Object other) =>
@@ -13,13 +15,15 @@ class XAxisOffsetDetails {
       other is XAxisOffsetDetails &&
           runtimeType == other.runtimeType &&
           offset == other.offset &&
-          maxOffset == other.maxOffset;
+          maxOffset == other.maxOffset &&
+          prevOffset == other.prevOffset;
 
   @override
-  int get hashCode => offset.hashCode ^ maxOffset.hashCode;
+  int get hashCode =>
+      offset.hashCode ^ maxOffset.hashCode ^ prevOffset.hashCode;
 
   @override
   String toString() {
-    return 'XAxisOffsetDetails{offset: $offset, maxOffset: $maxOffset}';
+    return 'XAxisOffsetDetails{offset: $offset, maxOffset: $maxOffset, prevOffset: $prevOffset}';
   }
 }

@@ -98,6 +98,11 @@ class CandlestickChart extends StatefulWidget {
   /// The duration of the animation when the chart is updated.
   final Duration animationDuration;
 
+  /// Whether to disable user interaction with the chart.
+  /// If true, the chart will not respond to user gestures.
+  /// Defaults to false.
+  final bool disableInteraction;
+
   const CandlestickChart({
     Key? key,
     required this.candles,
@@ -118,6 +123,7 @@ class CandlestickChart extends StatefulWidget {
     this.currentVolume,
     this.minVisibleCandleCount = 45,
     this.maxVisibleCandleCount = 180,
+    this.disableInteraction = false,
     this.animationDuration = const Duration(milliseconds: 300),
   })  : this.style = style ?? const ChartStyle(),
         assert(
@@ -150,6 +156,7 @@ class _CandlestickChartState extends State<CandlestickChart> {
   double? _prevChartWidth; // used by _handleResize
   late double _prevCandleWidth;
   late double _prevStartOffset;
+  @Deprecated('Unused field, will be removed in the next release.')
   late Offset _initialFocalPoint;
   PainterParams? _prevParams; // used in onTapUp event
 
@@ -232,31 +239,33 @@ class _CandlestickChartState extends State<CandlestickChart> {
             .whereType<double>()
             .fold(double.infinity, min);
 
+        final params = PainterParams(
+          candles: candlesInRange,
+          style: widget.style,
+          size: size,
+          candleWidth: _candleWidth,
+          startOffset: _startOffset,
+          maxPrice: maxPrice,
+          minPrice: minPrice,
+          maxVol: maxVol,
+          minVol: minVol,
+          xShift: xShift,
+          tapPosition: _tapPosition,
+          leadingTrends: leadingTrends,
+          trailingTrends: trailingTrends,
+          currentPrice: widget.currentPrice,
+          currentVolume: widget.currentVolume,
+          enableGridLines: widget.enableGridLines,
+          priceLabelPositions:
+              widget.priceLabelPositions ?? const [0.1, 0.3, 0.5, 0.7, 0.9],
+          volumeLabelPositions:
+              widget.volumeLabelPositions ?? const [0.3, 0.6, 0.9],
+          distanceBetweenCandle: widget.distanceBetweenCandle,
+        );
         final child = TweenAnimationBuilder(
           tween: PainterParamsTween(
-            end: PainterParams(
-              candles: candlesInRange,
-              style: widget.style,
-              size: size,
-              candleWidth: _candleWidth,
-              startOffset: _startOffset,
-              maxPrice: maxPrice,
-              minPrice: minPrice,
-              maxVol: maxVol,
-              minVol: minVol,
-              xShift: xShift,
-              tapPosition: _tapPosition,
-              leadingTrends: leadingTrends,
-              trailingTrends: trailingTrends,
-              currentPrice: widget.currentPrice,
-              currentVolume: widget.currentVolume,
-              enableGridLines: widget.enableGridLines,
-              priceLabelPositions:
-                  widget.priceLabelPositions ?? const [0.1, 0.3, 0.5, 0.7, 0.9],
-              volumeLabelPositions:
-                  widget.volumeLabelPositions ?? const [0.3, 0.6, 0.9],
-              distanceBetweenCandle: widget.distanceBetweenCandle,
-            ),
+            begin: _prevParams,
+            end: params,
           ),
           duration: widget.animationDuration,
           curve: Curves.easeOut,
@@ -292,6 +301,9 @@ class _CandlestickChartState extends State<CandlestickChart> {
             }
           },
           child: GestureDetector(
+            onHorizontalDragStart: (details) =>
+                _onScaleStart(details.localPosition),
+            onHorizontalDragUpdate: _onHorizontalDragUpdate,
             // Tap and hold to view candle details
             onTapDown: (details) => setState(() {
               _tapPosition = details.localPosition;
@@ -314,12 +326,18 @@ class _CandlestickChartState extends State<CandlestickChart> {
   }
 
   _onScaleStart(Offset focalPoint) {
+    if (widget.disableInteraction) {
+      return;
+    }
     _prevCandleWidth = _candleWidth;
     _prevStartOffset = _startOffset;
     _initialFocalPoint = focalPoint;
   }
 
   _onScaleUpdate(double scale, Offset focalPoint, double w) {
+    if (widget.disableInteraction) {
+      return;
+    }
     // Handle zoom
     var candleWidth = _prevCandleWidth * scale;
 
@@ -330,35 +348,35 @@ class _CandlestickChartState extends State<CandlestickChart> {
     } else if (visibleCandles > widget.maxVisibleCandleCount) {
       candleWidth = w / widget.maxVisibleCandleCount;
     }
-    final clampedScale = candleWidth / _prevCandleWidth;
-    var startOffset = _prevStartOffset * clampedScale;
-    // Handle pan
-    final dx = (focalPoint - _initialFocalPoint).dx * -1;
-    startOffset += dx;
-    // Adjust pan when zooming
-    final double prevCount = w / _prevCandleWidth;
-    final double currCount = w / candleWidth;
-    final zoomAdjustment = (currCount - prevCount) * candleWidth;
-    final focalPointFactor = focalPoint.dx / w;
-    startOffset -= zoomAdjustment * focalPointFactor;
-    final maxStartOffset = _getMaxStartOffset(w, candleWidth);
-    startOffset = startOffset.clamp(0, maxStartOffset);
-    // Fire candle width resize event
     if (candleWidth != _candleWidth) {
       widget.onCandleResize?.call(candleWidth);
     }
     // Apply changes
     setState(() {
       _candleWidth = candleWidth;
-      _startOffset = startOffset;
     });
+  }
 
-    if (_prevStartOffset != startOffset) {
+  void _onHorizontalDragUpdate(DragUpdateDetails details) {
+    if (widget.disableInteraction) {
+      return;
+    }
+    final dx = details.delta.dx;
+    final w = _prevChartWidth!;
+
+    var startOffset = _startOffset - dx;
+    final maxStartOffset = _getMaxStartOffset(w, _candleWidth);
+    startOffset = startOffset.clamp(0, maxStartOffset);
+
+    setState(() {
       widget.onXOffsetChanged?.call(XAxisOffsetDetails(
         offset: startOffset,
         maxOffset: maxStartOffset,
+        prevOffset: _prevStartOffset,
       ));
-    }
+      _startOffset = startOffset;
+      _prevStartOffset = startOffset;
+    });
   }
 
   _handleResize(double w) {
