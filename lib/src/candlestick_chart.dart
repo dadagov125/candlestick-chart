@@ -160,6 +160,15 @@ class _CandlestickChartState extends State<CandlestickChart> {
   late Offset _initialFocalPoint;
   PainterParams? _prevParams; // used in onTapUp event
 
+  bool _isScalingInProgress = false;
+
+  bool get _canScale => !widget.disableInteraction;
+
+  bool get _canHorizontalDrag =>
+      !widget.disableInteraction && !_isScalingInProgress;
+
+  bool get _canTap => !widget.disableInteraction;
+
   @override
   void didUpdateWidget(covariant CandlestickChart oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -301,23 +310,32 @@ class _CandlestickChartState extends State<CandlestickChart> {
             }
           },
           child: GestureDetector(
-            onHorizontalDragStart: (details) =>
-                _onScaleStart(details.localPosition),
+            onHorizontalDragStart: _onHorizontalDragStart,
             onHorizontalDragUpdate: _onHorizontalDragUpdate,
             // Tap and hold to view candle details
-            onTapDown: (details) => setState(() {
-              _tapPosition = details.localPosition;
-            }),
+            onTapDown: (details) {
+              if (!_canTap) {
+                return;
+              }
+              setState(() {
+                _tapPosition = details.localPosition;
+              });
+            },
             onTapCancel: () => setState(() => _tapPosition = null),
             onTapUp: (_) {
+              if (!_canTap) {
+                return;
+              }
               // Fire callback event and reset _tapPosition
               if (widget.onTap != null) _fireOnTapEvent();
               setState(() => _tapPosition = null);
             },
             // Pan and zoom
             onScaleStart: (details) => _onScaleStart(details.localFocalPoint),
-            onScaleUpdate: (details) =>
-                _onScaleUpdate(details.scale, details.localFocalPoint, w),
+            onScaleUpdate: (details) {
+              _onScaleUpdate(details.scale, details.localFocalPoint, w);
+            },
+            onScaleEnd: _onScaleEnd,
             child: child,
           ),
         );
@@ -326,16 +344,21 @@ class _CandlestickChartState extends State<CandlestickChart> {
   }
 
   _onScaleStart(Offset focalPoint) {
-    if (widget.disableInteraction) {
+    if (!_canScale) {
       return;
     }
+    _isScalingInProgress = true;
     _prevCandleWidth = _candleWidth;
     _prevStartOffset = _startOffset;
     _initialFocalPoint = focalPoint;
   }
 
+  void _onScaleEnd(ScaleEndDetails details) {
+    _isScalingInProgress = false;
+  }
+
   _onScaleUpdate(double scale, Offset focalPoint, double w) {
-    if (widget.disableInteraction) {
+    if (!_canScale) {
       return;
     }
     // Handle zoom
@@ -357,8 +380,15 @@ class _CandlestickChartState extends State<CandlestickChart> {
     });
   }
 
+  void _onHorizontalDragStart(DragStartDetails details) {
+    if (!_canHorizontalDrag) {
+      return;
+    }
+    _prevStartOffset = _startOffset;
+  }
+
   void _onHorizontalDragUpdate(DragUpdateDetails details) {
-    if (widget.disableInteraction) {
+    if (!_canHorizontalDrag) {
       return;
     }
     final dx = details.delta.dx;
