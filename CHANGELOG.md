@@ -1,3 +1,16 @@
+## 0.4.2
+
+* **Fixes:**
+  * Y-axis offset of the current price mark below the candle area.
+  * Intersection of events between horizontal scroll and scaling.
+
+* **New Features:**
+  * Added `prevOffset` param into `XAxisOffsetDetails`.
+  * Added `disableInteraction` to `CandlestickChart` for disabling user interaction with the chart.
+
+* **Updates:**
+  * Horizontal scroll has been redesigned.
+
 ## 0.4.1
 
 * **Fixes:**
