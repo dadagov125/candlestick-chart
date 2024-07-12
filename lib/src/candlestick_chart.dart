@@ -156,7 +156,6 @@ class _CandlestickChartState extends State<CandlestickChart> {
   double? _prevChartWidth; // used by _handleResize
   late double _prevCandleWidth;
   late double _prevStartOffset;
-  @Deprecated('Unused field, will be removed in the next release.')
   late Offset _initialFocalPoint;
   PainterParams? _prevParams; // used in onTapUp event
 
@@ -376,12 +375,32 @@ class _CandlestickChartState extends State<CandlestickChart> {
     } else if (visibleCandles > widget.maxVisibleCandleCount) {
       candleWidth = w / widget.maxVisibleCandleCount;
     }
+    final clampedScale = candleWidth / _prevCandleWidth;
+    var startOffset = _prevStartOffset * clampedScale;
+    // Handle pan
+    final dx = (focalPoint - _initialFocalPoint).dx * -1;
+    startOffset += dx;
+    // Adjust pan when zooming
+    final double prevCount = w / _prevCandleWidth;
+    final double currCount = w / candleWidth;
+    final zoomAdjustment = (currCount - prevCount) * candleWidth;
+    final focalPointFactor = focalPoint.dx / w;
+    startOffset -= zoomAdjustment * focalPointFactor;
+    final maxStartOffset = _getMaxStartOffset(w, candleWidth);
+    startOffset = startOffset.clamp(0, maxStartOffset);
+    // Fire candle width resize event
     if (candleWidth != _candleWidth) {
       widget.onCandleResize?.call(candleWidth);
     }
     // Apply changes
     setState(() {
+      widget.onXOffsetChanged?.call(XAxisOffsetDetails(
+        offset: startOffset,
+        maxOffset: maxStartOffset,
+        prevOffset: _prevStartOffset,
+      ));
       _candleWidth = candleWidth;
+      _startOffset = startOffset;
     });
   }
 
