@@ -1,3 +1,11 @@
+## 0.4.3
+
+* **Fixes:**
+  * Out-of-range error by validating start and end indices in candlestick chart.
+
+* **Updates:**
+  * Improved scaling.
+
 ## 0.4.2
 
 * **Fixes:**
