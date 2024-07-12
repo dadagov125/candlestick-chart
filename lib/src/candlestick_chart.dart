@@ -200,8 +200,13 @@ class _CandlestickChartState extends State<CandlestickChart> {
         // Find the visible data range
         final int start = (_startOffset / _candleWidth).floor();
         final int count = (w / _candleWidth).ceil();
-        final int end = (start + count).clamp(start, widget.candles.length);
-        final candlesInRange = widget.candles.getRange(start, end).toList();
+        final int end = min((start + count), widget.candles.length);
+
+        final validStart = max(0, min(start, widget.candles.length - 1));
+        final validEnd = min(max(end, validStart + 1), widget.candles.length);
+        final candlesInRange =
+            widget.candles.getRange(validStart, validEnd).toList();
+
         if (end < widget.candles.length) {
           // Put in an extra item, since it can become visible when scrolling
           final nextItem = widget.candles[end];
